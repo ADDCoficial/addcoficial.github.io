@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADDC - Assembleia de Deus Discípulos de Cristo</title>
+  <!-- Link para o ficheiro CSS externo -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- CABEÇALHO / NAVEGAÇÃO -->
+  <header class="header">
+    <div class="container nav-container">
+      <div class="logo">
+        <img src="logo.jpeg" alt="ADDC Logo" style="height: 50px; vertical-align: middle;">
+      </div>
+      
+      <!-- Navegação por abas com JavaScript -->
+      <nav class="nav-links">
+        <button onclick="mudarAba('mural')" class="nav-btn active">Início / Avisos</button>
+        <button onclick="mudarAba('sermoes')" class="nav-btn">Sermões</button>
+        <button onclick="mudarAba('sobre')" class="nav-btn">Sobre Nós</button>
+      </nav>
+
+      <a href="#" class="btn-live">Ao Vivo</a>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="container content">
+
+    <!-- LOGO CENTRAL FIXO (Exibido permanentemente em todas as abas) -->
+    <div style="text-align: center; margin: 20px 0 30px 0;">
+      <img src="logo.jpeg" alt="Logo ADDC Central" style="max-width: 220px; height: auto; display: inline-block;">
+    </div>
+
+    <!-- SEÇÃO 1: MURAL E CULTOS (PÁGINA INICIAL) -->
+    <section id="aba-mural" class="aba-conteudo">
+      <div class="hero">
+        <h1>Assembleia de Deus <span class="highlight">Discípulos de Cristo</span></h1>
+        <p>Um lugar para pertencer, crescer na Palavra e viver o verdadeiro discipulado.</p>
+      </div>
+
+      <h2 class="section-title">Cultos & Avisos da Semana</h2>
+      
+      <!-- Container onde os cards do JSON serão inseridos dinamicamente -->
+      <div class="cards-grid" id="cards-container">
+        <!-- Carregando via JavaScript... -->
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: PREGAÇÕES / SERMÕES -->
+    <section id="aba-sermoes" class="aba-conteudo hidden">
+      <h2 class="section-title">Galeria de Pregações</h2>
+      <p class="subtitle">Assista às mensagens mais recentes gravadas nos nossos cultos.</p>
+
+      <div class="video-container">
+        <p>[ Embed do Player de Vídeo do YouTube da ADDC ]</p>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: SOBRE NÓS -->
+    <section id="aba-sobre" class="aba-conteudo hidden">
+      <h2 class="section-title">Sobre a ADDC</h2>
+      <div class="card about-card">
+        <h3>Nossa Visão & Missão</h3>
+        <p>
+          A Assembleia de Deus Discípulos de Cristo (ADDC) é uma comunidade cristã vocacionada para proclamar o Evangelho, formar discípulos maduros e impactar a sociedade através do amor de Jesus Cristo.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="footer">
+    <p>© 2026 ADDC — Assembleia de Deus Discípulos de Cristo. Todos os direitos reservados.</p>
+  </footer>
+
+  <!-- SCRIPT EM JAVASCRIPT PARA CARREGAR O JSON E ALTERNAR ABAS -->
+  <script>
+    // Função para buscar e renderizar os avisos do arquivo JSON
+    async function carregarAvisos() {
+      try {
+        const resposta = await fetch('arquivos.json');
+        if (!resposta.ok) {
+          throw new Error('Não foi possível carregar os dados.');
+        }
+        const dados = await resposta.json();
+        const container = document.getElementById('cards-container');
+        
+        // Limpa o container
+        container.innerHTML = '';
+
+        // Cria um card para cada item do array "avisos" no JSON
+        dados.avisos.forEach(aviso => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          
+          card.innerHTML = `
+            <span class="badge">${aviso.badge}</span>
+            <h3>${aviso.titulo}</h3>
+            <p>${aviso.descricao}</p>
+          `;
+          
+          container.appendChild(card);
+        });
+      } catch (erro) {
+        console.error('Erro ao carregar o JSON:', erro);
+        document.getElementById('cards-container').innerHTML = 
+          '<p style="color: var(--text-secondary);">Erro ao carregar os avisos do mural. Certifique-se de estar rodando em um servidor local.</p>';
+      }
+    }
+
+    // Executa a função assim que a página termina de carregar
+    document.addEventListener('DOMContentLoaded', carregarAvisos);
+
+    // Função para alternar as abas
+    function mudarAba(nomeAba) {
+      document.querySelectorAll('.aba-conteudo').forEach(el => {
+        el.classList.add('hidden');
+      });
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      document.getElementById('aba-' + nomeAba).classList.remove('hidden');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>

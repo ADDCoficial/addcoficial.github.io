@@ -1,0 +1,285 @@
+/* --- RESET E VARIÁVEIS --- */
+:root {
+  --bg-color: #0b0e14;
+  --card-bg: #131924;
+  --cyan-main: #00e5ff;
+  --cyan-glow: rgba(0, 229, 255, 0.2);
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --border-color: rgba(0, 229, 255, 0.15);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+/* --- HEADER & NAVEGAÇÃO --- */
+.header {
+  background-color: rgba(11, 14, 20, 0.95);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--cyan-main);
+  letter-spacing: 1px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover, .nav-btn.active {
+  color: var(--cyan-main);
+  background-color: var(--card-bg);
+}
+
+.btn-live {
+  background-color: var(--cyan-main);
+  color: #000;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 8px 18px;
+  border-radius: 20px;
+  box-shadow: 0 0 12px var(--cyan-glow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+
+.btn-live:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.4);
+}
+
+/* --- CONTEÚDO PRINCIPAL --- */
+.content {
+  flex: 1;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* --- HERO SECTION --- */
+.hero {
+  text-align: center;
+  padding: 30px 0 40px 0;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 30px;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
+
+.highlight {
+  color: var(--cyan-main);
+}
+
+.hero p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- TÍTULOS --- */
+.section-title {
+  font-size: 1.5rem;
+  color: var(--cyan-main);
+  border-left: 4px solid var(--cyan-main);
+  padding-left: 12px;
+  margin-bottom: 25px;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+/* --- CARDS DA HOME --- */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  position: relative;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--cyan-main);
+}
+
+.badge {
+  display: inline-block;
+  background-color: rgba(0, 229, 255, 0.1);
+  color: var(--cyan-main);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+.card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+}
+
+.card p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.schedule-list {
+  list-style: none;
+}
+
+.schedule-list li {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.schedule-list strong {
+  color: var(--cyan-main);
+}
+
+/* --- SERMÕES --- */
+.video-container {
+  aspect-ratio: 16 / 9;
+  background-color: #000;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  width: 100%;
+}
+
+/* --- SOBRE NÓS --- */
+.about-card p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* --- RODAPÉ --- */
+.footer {
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  padding: 25px 20px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* --- RESPONSIVIDADE PARA SMARTPHONES --- */
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    height: auto;
+    padding: 12px 15px;
+    gap: 12px;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .nav-btn {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    flex: 1;
+    text-align: center;
+  }
+
+  .btn-live {
+    width: 100%;
+    text-align: center;
+    padding: 8px;
+  }
+
+  .hero {
+    padding: 20px 0 30px 0;
+  }
+
+  .hero h1 {
+    font-size: 1.6rem;
+  }
+
+  .hero p {
+    font-size: 0.95rem;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr; /* Força os cards a ficarem em coluna única */
+  }
+
+  .container {
+    padding: 0 15px;
+  }
+}
