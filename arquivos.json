@@ -4,19 +4,19 @@
         "id": 1,
         "badge": "Programação",
         "titulo": "Culto da Família",
-        "descricao": "Neste domingo às 18h. Venha adorar a Deus conosco, você e sua família!"
+        "descricao": "Neste domingo às 19h. Venha adorar a Deus conosco, você e sua família!"
       },
       {
         "id": 2,
-        "badge": "Destaque",
-        "titulo": "Vigília dos Discípulos",
-        "descricao": "Sexta-feira às 22h na nave principal da ADDC. Um momento de muita busca."
+        "badge": "Programação",
+        "titulo": " Circulo de Oração ",
+        "descricao": "Segunda-feira  "
       },
       {
         "id": 3,
-        "badge": "Inscrições",
-        "titulo": "Novo Batismo",
-        "descricao": "As inscrições para a próxima classe de batismo já estão abertas na secretaria."
+        "badge": "Programação",
+        "titulo": " Culto de cura e libertação pela palavra",
+        "descricao": "Quarta-feira às 19h em nossa igreja"
       }
     ]
   }
