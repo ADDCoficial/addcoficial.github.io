@@ -7,7 +7,7 @@ Este é o repositório do site oficial da **Assembleia de Deus Discípulos de Cr
 ## 🌐 Site Online
 
 O site pode ser acedido através do link:
-👉 **[https://addcoficial.github.io/Site-me/](https://addcoficial.github.io/Site-me/)**
+👉 **[https://addcoficial.github.io/Site-me/](https://addcoficial.github.io)**
 
 ---
 
