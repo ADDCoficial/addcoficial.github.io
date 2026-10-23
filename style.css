@@ -240,6 +240,22 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+
+/* --- FOTO DE PROMOÇÃO (FESTIVIDADE) --- */
+.promo-banner {
+  margin: 30px auto 0 auto;
+  max-width: 420px;
+}
+
+.promo-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
 /* --- RESPONSIVIDADE PARA SMARTPHONES --- */
 @media (max-width: 768px) {
   .nav-container {
