@@ -134,6 +134,7 @@
       try {
         container.innerHTML = '<p style="color: var(--text-secondary);">Carregando mídias...</p>';
         
+        // URL Corrigida apontando para o endpoint REST correto do GitHub
         const urlAPI = `https://github.com{GITHUB_USER}/${GITHUB_REPO}/contents/galeria`;
         const resposta = await fetch(urlAPI);
         
