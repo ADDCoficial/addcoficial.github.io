@@ -91,9 +91,8 @@
 
   <!-- SCRIPT EM JAVASCRIPT PARA CARREGAR O JSON E ALTERNAR ABAS -->
   <script>
-    // Configurações do seu repositório Git para carregar os arquivos de mídia
-    const GITHUB_USER = "SEU_USUARIO_DO_GITHUB";
-    const GITHUB_REPO = "NOME_DO_REPOSITORIO";
+    const GITHUB_USER = "ADDCoficial";
+    const GITHUB_REPO = "addcoficial.github.io";
 
     // Função para buscar e renderizar os avisos do arquivo JSON
     async function carregarAvisos() {
@@ -105,10 +104,8 @@
         const dados = await resposta.json();
         const container = document.getElementById('cards-container');
         
-        // Limpa o container
         container.innerHTML = '';
 
-        // Cria um card para cada item do array "avisos" no JSON
         dados.avisos.forEach(aviso => {
           const card = document.createElement('div');
           card.className = 'card';
@@ -128,11 +125,10 @@
       }
     }
 
-    // Função assíncrona para buscar mídias (fotos e vídeos) do repositório no GitHub Pages
+    // Função assíncrona para buscar mídias do repositório no GitHub Pages
     async function carregarGaleria() {
       const container = document.getElementById('galeria-container');
       
-      // Evita re-fetching desnecessário se já existirem mídias renderizadas
       if (container.children.length > 0 && !container.innerHTML.includes('Carregando')) return;
 
       try {
@@ -153,17 +149,14 @@
           return;
         }
 
-        // Renderiza cada arquivo tratando se é imagem ou vídeo
         arquivos.forEach(file => {
           const nomeArquivo = file.name;
           
           const ehImagem = /\.(jfif|pjpeg|jpeg|pjpg|png|jpg|gif|webp)$/i.test(nomeArquivo);
           const ehVideo = /\.(mp4|webm|ogg|mov)$/i.test(nomeArquivo);
 
-          // Ignora arquivos que não sejam mídias explícitas (ex: .gitkeep)
           if (!ehImagem && !ehVideo) return;
 
-          // Limpa o título tirando extensões e convertendo hífens/underlines em espaços
           const tituloLimpo = nomeArquivo
             .replace(/\.[^/.]+$/, "")
             .replace(/[_-]/g, " ")
@@ -180,7 +173,6 @@
           if (ehImagem) {
             elementoMidia = `<img src="${file.download_url}" alt="${tituloLimpo}" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px;">`;
           } else if (ehVideo) {
-            // Adicionado preload="metadata" para carregar as dimensões e duração sem baixar todo o arquivo de vez
             elementoMidia = `<video src="${file.download_url}" controls preload="metadata" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; background: #000;"></video>`;
           }
 
@@ -202,10 +194,8 @@
       }
     }
 
-    // Executa a função assim que a página termina de carregar
     document.addEventListener('DOMContentLoaded', carregarAvisos);
 
-    // Função para alternar as abas
     function mudarAba(nomeAba) {
       document.querySelectorAll('.aba-conteudo').forEach(el => {
         el.classList.add('hidden');
@@ -216,9 +206,10 @@
       });
 
       document.getElementById('aba-' + nomeAba).classList.remove('hidden');
-      event.target.classList.add('active');
+      if (event && event.target) {
+        event.target.classList.add('active');
+      }
 
-      // Gatilho dinâmico para a nova aba
       if (nomeAba === 'galeria') {
         carregarGaleria();
       }
