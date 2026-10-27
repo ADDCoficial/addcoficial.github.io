@@ -91,9 +91,6 @@
 
   <!-- SCRIPT EM JAVASCRIPT PARA CARREGAR O JSON E ALTERNAR ABAS -->
   <script>
-    const GITHUB_USER = "ADDCoficial";
-    const GITHUB_REPO = "addcoficial.github.io";
-
     // Função para buscar e renderizar os avisos do arquivo JSON
     async function carregarAvisos() {
       try {
@@ -125,73 +122,59 @@
       }
     }
 
-    // Função assíncrona para buscar mídias do repositório no GitHub Pages
-    async function carregarGaleria() {
+    // Função para renderizar mídias de forma estática e contornar travas de CORS da API
+    function carregarGaleria() {
       const container = document.getElementById('galeria-container');
       
       if (container.children.length > 0 && !container.innerHTML.includes('Carregando')) return;
 
-      try {
-        container.innerHTML = '<p style="color: var(--text-secondary);">Carregando mídias...</p>';
-        
-        // URL Corrigida apontando para o endpoint REST correto do GitHub
-        const urlAPI = `https://github.com{GITHUB_USER}/${GITHUB_REPO}/contents/galeria`;
-        const resposta = await fetch(urlAPI);
-        
-        if (!resposta.ok) {
-          throw new Error('Falha na resposta da API do GitHub');
-        }
-        
-        const arquivos = await resposta.json();
-        container.innerHTML = '';
+      container.innerHTML = '';
 
-        if (!Array.isArray(arquivos) || arquivos.length === 0) {
-          container.innerHTML = '<p style="color: var(--text-secondary);">Nenhuma mídia encontrada na pasta "galeria".</p>';
-          return;
-        }
+      // ARRAY DE CONTROLE DE MÍDIA:
+      // Gerencie as fotos e vídeos da pasta "galeria" incluindo os nomes dos arquivos aqui:
+      const arquivosGaleria = [
+        "festividade.jpeg",
+        "Gravando 2026-10-20 094724.mp4"
+      ];
 
-        arquivos.forEach(file => {
-          const nomeArquivo = file.name;
-          
-          const ehImagem = /\.(jfif|pjpeg|jpeg|pjpg|png|jpg|gif|webp)$/i.test(nomeArquivo);
-          const ehVideo = /\.(mp4|webm|ogg|mov)$/i.test(nomeArquivo);
+      arquivosGaleria.forEach(nomeArquivo => {
+        const ehImagem = /\.(jfif|pjpeg|jpeg|pjpg|png|jpg|gif|webp)$/i.test(nomeArquivo);
+        const ehVideo = /\.(mp4|webm|ogg|mov)$/i.test(nomeArquivo);
 
-          if (!ehImagem && !ehVideo) return;
+        if (!ehImagem && !ehVideo) return;
 
-          const tituloLimpo = nomeArquivo
-            .replace(/\.[^/.]+$/, "")
-            .replace(/[_-]/g, " ")
-            .trim();
+        // Limpa o título tirando extensões e convertendo hífens/underlines em espaços
+        const tituloLimpo = nomeArquivo
+          .replace(/\.[^/.]+$/, "")
+          .replace(/[_-]/g, " ")
+          .trim();
 
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.style.padding = '16px';
-          card.style.display = 'flex';
-          card.style.flexDirection = 'column';
-          card.style.gap = '12px';
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.padding = '16px';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.gap = '12px';
 
-          let elementoMidia = '';
-          if (ehImagem) {
-            elementoMidia = `<img src="${file.download_url}" alt="${tituloLimpo}" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px;">`;
-          } else if (ehVideo) {
-            elementoMidia = `<video src="${file.download_url}" controls preload="metadata" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; background: #000;"></video>`;
-          }
+        const caminhoArquivo = `galeria/${nomeArquivo}`;
 
-          card.innerHTML = `
-            ${elementoMidia}
-            <h3 style="font-size: 1.1rem; margin: 4px 0 0 0; text-transform: capitalize; color: var(--text-primary);">${tituloLimpo}</h3>
-          `;
-
-          container.appendChild(card);
-        });
-
-        if (container.children.length === 0) {
-          container.innerHTML = '<p style="color: var(--text-secondary);">Nenhuma foto ou vídeo válido encontrado na pasta "galeria".</p>';
+        let elementoMidia = '';
+        if (ehImagem) {
+          elementoMidia = `<img src="${caminhoArquivo}" alt="${tituloLimpo}" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px;">`;
+        } else if (ehVideo) {
+          elementoMidia = `<video src="${caminhoArquivo}" controls preload="metadata" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; background: #000;"></video>`;
         }
 
-      } catch (erro) {
-        console.error('Erro ao carregar galeria via API:', erro);
-        container.innerHTML = '<p style="color: var(--text-secondary);">Erro ao carregar mídias da galeria.</p>';
+        card.innerHTML = `
+          ${elementoMidia}
+          <h3 style="font-size: 1.1rem; margin: 4px 0 0 0; text-transform: capitalize; color: var(--text-primary);">${tituloLimpo}</h3>
+        `;
+
+        container.appendChild(card);
+      });
+
+      if (container.children.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-secondary);">Nenhuma foto ou vídeo configurado na galeria ainda.</p>';
       }
     }
 
@@ -207,7 +190,7 @@
       });
 
       document.getElementById('aba-' + nomeAba).classList.remove('hidden');
-      if (event && event.target) {
+      if (event && event.target && event.target.classList) {
         event.target.classList.add('active');
       }
 
