@@ -21,7 +21,6 @@
         <button onclick="mudarAba('mural')" class="nav-btn active">Início / Avisos</button>
         <button onclick="mudarAba('sermoes')" class="nav-btn">Sermões</button>
         <button onclick="mudarAba('sobre')" class="nav-btn">Sobre Nós</button>
-        <button onclick="mudarAba('galeria')" class="nav-btn">Galeria</button>
       </nav>
 
       <a href="#" class="btn-live">Ao Vivo</a>
@@ -72,16 +71,6 @@
       </div>
     </section>
 
-    <!-- SEÇÃO 4: GALERIA DE MÍDIAS (FOTOS E VÍDEOS) -->
-    <section id="aba-galeria" class="aba-conteudo hidden">
-      <h2 class="section-title">Galeria de Fotos & Vídeos</h2>
-      <p class="subtitle">Acompanhe os momentos e registros da nossa comunidade.</p>
-      
-      <div class="cards-grid" id="galeria-container">
-        <!-- Carregando via JavaScript... -->
-      </div>
-    </section>
-
   </main>
 
   <!-- RODAPÉ -->
@@ -101,8 +90,10 @@
         const dados = await resposta.json();
         const container = document.getElementById('cards-container');
         
+        // Limpa o container
         container.innerHTML = '';
 
+        // Cria um card para cada item do array "avisos" no JSON
         dados.avisos.forEach(aviso => {
           const card = document.createElement('div');
           card.className = 'card';
@@ -122,64 +113,10 @@
       }
     }
 
-    // Função para renderizar mídias de forma estática e contornar travas de CORS da API
-    function carregarGaleria() {
-      const container = document.getElementById('galeria-container');
-      
-      if (container.children.length > 0 && !container.innerHTML.includes('Carregando')) return;
-
-      container.innerHTML = '';
-
-      // ARRAY DE CONTROLE DE MÍDIA:
-      // Gerencie as fotos e vídeos da pasta "galeria" incluindo os nomes dos arquivos aqui:
-      const arquivosGaleria = [
-        "festividade.jpeg",
-        
-      ];
-
-      arquivosGaleria.forEach(nomeArquivo => {
-        const ehImagem = /\.(jfif|pjpeg|jpeg|pjpg|png|jpg|gif|webp)$/i.test(nomeArquivo);
-        const ehVideo = /\.(mp4|webm|ogg|mov)$/i.test(nomeArquivo);
-
-        if (!ehImagem && !ehVideo) return;
-
-        // Limpa o título tirando extensões e convertendo hífens/underlines em espaços
-        const tituloLimpo = nomeArquivo
-          .replace(/\.[^/.]+$/, "")
-          .replace(/[_-]/g, " ")
-          .trim();
-
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.style.padding = '16px';
-        card.style.display = 'flex';
-        card.style.flexDirection = 'column';
-        card.style.gap = '12px';
-
-        const caminhoArquivo = `galeria/${nomeArquivo}`;
-
-        let elementoMidia = '';
-        if (ehImagem) {
-          elementoMidia = `<img src="${caminhoArquivo}" alt="${tituloLimpo}" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px;">`;
-        } else if (ehVideo) {
-          elementoMidia = `<video src="${caminhoArquivo}" controls preload="metadata" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; background: #000;"></video>`;
-        }
-
-        card.innerHTML = `
-          ${elementoMidia}
-          <h3 style="font-size: 1.1rem; margin: 4px 0 0 0; text-transform: capitalize; color: var(--text-primary);">${tituloLimpo}</h3>
-        `;
-
-        container.appendChild(card);
-      });
-
-      if (container.children.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-secondary);">Nenhuma foto ou vídeo configurado na galeria ainda.</p>';
-      }
-    }
-
+    // Executa a função assim que a página termina de carregar
     document.addEventListener('DOMContentLoaded', carregarAvisos);
 
+    // Função para alternar as abas
     function mudarAba(nomeAba) {
       document.querySelectorAll('.aba-conteudo').forEach(el => {
         el.classList.add('hidden');
@@ -192,10 +129,6 @@
       document.getElementById('aba-' + nomeAba).classList.remove('hidden');
       if (event && event.target && event.target.classList) {
         event.target.classList.add('active');
-      }
-
-      if (nomeAba === 'galeria') {
-        carregarGaleria();
       }
     }
   </script>
