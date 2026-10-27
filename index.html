@@ -21,6 +21,7 @@
         <button onclick="mudarAba('mural')" class="nav-btn active">Início / Avisos</button>
         <button onclick="mudarAba('sermoes')" class="nav-btn">Sermões</button>
         <button onclick="mudarAba('sobre')" class="nav-btn">Sobre Nós</button>
+        <button onclick="mudarAba('galeria')" class="nav-btn">Galeria</button>
       </nav>
 
       <a href="#" class="btn-live">Ao Vivo</a>
@@ -40,7 +41,7 @@
       <div class="hero">
         <h1>Assembleia <span class="highlight">Discípulos de Cristo</span></h1>
         <p> Aqui priorizamos vida.</p>
-    
+      </div>
 
       <h2 class="section-title">Cultos & Avisos da Semana</h2>
       
@@ -71,6 +72,16 @@
       </div>
     </section>
 
+    <!-- SEÇÃO 4: GALERIA DE MÍDIAS (FOTOS E VÍDEOS) -->
+    <section id="aba-galeria" class="aba-conteudo hidden">
+      <h2 class="section-title">Galeria de Fotos & Vídeos</h2>
+      <p class="subtitle">Acompanhe os momentos e registros da nossa comunidade.</p>
+      
+      <div class="cards-grid" id="galeria-container">
+        <!-- Carregando via JavaScript... -->
+      </div>
+    </section>
+
   </main>
 
   <!-- RODAPÉ -->
@@ -80,6 +91,10 @@
 
   <!-- SCRIPT EM JAVASCRIPT PARA CARREGAR O JSON E ALTERNAR ABAS -->
   <script>
+    // Configurações do seu repositório Git para carregar os arquivos de mídia
+    const GITHUB_USER = "SEU_USUARIO_DO_GITHUB";
+    const GITHUB_REPO = "NOME_DO_REPOSITORIO";
+
     // Função para buscar e renderizar os avisos do arquivo JSON
     async function carregarAvisos() {
       try {
@@ -113,6 +128,80 @@
       }
     }
 
+    // Função assíncrona para buscar mídias (fotos e vídeos) do repositório no GitHub Pages
+    async function carregarGaleria() {
+      const container = document.getElementById('galeria-container');
+      
+      // Evita re-fetching desnecessário se já existirem mídias renderizadas
+      if (container.children.length > 0 && !container.innerHTML.includes('Carregando')) return;
+
+      try {
+        container.innerHTML = '<p style="color: var(--text-secondary);">Carregando mídias...</p>';
+        
+        const urlAPI = `https://github.com{GITHUB_USER}/${GITHUB_REPO}/contents/galeria`;
+        const resposta = await fetch(urlAPI);
+        
+        if (!resposta.ok) {
+          throw new Error('Falha na resposta da API do GitHub');
+        }
+        
+        const arquivos = await resposta.json();
+        container.innerHTML = '';
+
+        if (!Array.isArray(arquivos) || arquivos.length === 0) {
+          container.innerHTML = '<p style="color: var(--text-secondary);">Nenhuma mídia encontrada na pasta "galeria".</p>';
+          return;
+        }
+
+        // Renderiza cada arquivo tratando se é imagem ou vídeo
+        arquivos.forEach(file => {
+          const nomeArquivo = file.name;
+          
+          const ehImagem = /\.(jfif|pjpeg|jpeg|pjpg|png|jpg|gif|webp)$/i.test(nomeArquivo);
+          const ehVideo = /\.(mp4|webm|ogg|mov)$/i.test(nomeArquivo);
+
+          // Ignora arquivos que não sejam mídias explícitas (ex: .gitkeep)
+          if (!ehImagem && !ehVideo) return;
+
+          // Limpa o título tirando extensões e convertendo hífens/underlines em espaços
+          const tituloLimpo = nomeArquivo
+            .replace(/\.[^/.]+$/, "")
+            .replace(/[_-]/g, " ")
+            .trim();
+
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.style.padding = '16px';
+          card.style.display = 'flex';
+          card.style.flexDirection = 'column';
+          card.style.gap = '12px';
+
+          let elementoMidia = '';
+          if (ehImagem) {
+            elementoMidia = `<img src="${file.download_url}" alt="${tituloLimpo}" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px;">`;
+          } else if (ehVideo) {
+            // Adicionado preload="metadata" para carregar as dimensões e duração sem baixar todo o arquivo de vez
+            elementoMidia = `<video src="${file.download_url}" controls preload="metadata" style="width: 100%; height: 220px; object-fit: cover; border-radius: 8px; background: #000;"></video>`;
+          }
+
+          card.innerHTML = `
+            ${elementoMidia}
+            <h3 style="font-size: 1.1rem; margin: 4px 0 0 0; text-transform: capitalize; color: var(--text-primary);">${tituloLimpo}</h3>
+          `;
+
+          container.appendChild(card);
+        });
+
+        if (container.children.length === 0) {
+          container.innerHTML = '<p style="color: var(--text-secondary);">Nenhuma foto ou vídeo válido encontrado na pasta "galeria".</p>';
+        }
+
+      } catch (erro) {
+        console.error('Erro ao carregar galeria via API:', erro);
+        container.innerHTML = '<p style="color: var(--text-secondary);">Erro ao carregar mídias da galeria.</p>';
+      }
+    }
+
     // Executa a função assim que a página termina de carregar
     document.addEventListener('DOMContentLoaded', carregarAvisos);
 
@@ -128,6 +217,11 @@
 
       document.getElementById('aba-' + nomeAba).classList.remove('hidden');
       event.target.classList.add('active');
+
+      // Gatilho dinâmico para a nova aba
+      if (nomeAba === 'galeria') {
+        carregarGaleria();
+      }
     }
   </script>
 </body>
